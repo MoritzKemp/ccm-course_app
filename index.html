@@ -34,6 +34,12 @@ THE SOFTWARE.
         <div class="course-app"></div>
         <script>
             
+            if("serviceWorker" in navigator){
+                navigator.serviceWorker.register('serviceworker.js');
+            } else {
+                console.log("No SW support here.");
+            }
+            
             let navConfig = {
                 "header_text": "Course App",
                 "hasBackground":"false",

@@ -27,12 +27,16 @@
         name: 'course_app',
         ccm: 'https://akless.github.io/ccm/ccm.js',
         config: {
-            'navComp':              ['ccm.load', 'https://moritzkemp.github.io/ccm-nav_tabs/resources/ccm.nav_tabs.js'],
+            'navComp':              ['ccm.load', 'https://moritzkemp.github.io/ccm-nav_tabs/resources/ccm.nav_tabs.min.js'],
             'navConfig':            {},
-            'newsFeedComp':         ['ccm.load', 'https://moritzkemp.github.io/ccm-news_feed/resources/ccm.news_feed.js'],
+            'newsFeedComp':         ['ccm.load', 'https://moritzkemp.github.io/ccm-news_feed/resources/ccm.news_feed.min.js'],
             'newsFeedConfig':       {},
             'userComp':             ['ccm.load', 'https://akless.github.io/ccm-components/user/ccm.user.min.js'],
             'userConfig':           {},
+            'teamBuildingComp':     ['ccm.load', 'https://akless.github.io/ccm-components/teambuild/versions/ccm.teambuild-1.0.0.min.js'],
+            'teamBuildingConfig':   {},
+            'kanbanBoardComp':      ['ccm.load', './placeholder.js'],
+            'kanbanBoardConfig':    {},
             'tileComp':             ['ccm.load', 'https://moritzkemp.github.io/ccm-tile/resources/ccm.tile.js'],
             'tileLearningUnitConfig':           {
                 "tiles": [
@@ -69,8 +73,21 @@
                     }
                 ]
             },
-            'learningUnitComp':     ['ccm.load', 'https://akless.github.io/ccm-components/le/versions/ccm.le-2.0.0.js'],
-            'learningUnitConfig':   {},
+            'tileSocialConfig':{
+                "tiles": [
+                    {
+                        "headline":"Kanban Board",
+                        "subline": "Organisieren Sie ihre Arbeit mit Kanban.",
+                        "id": "kanban"
+                    },
+                    {
+                        "headline":"Team-Building",
+                        "subline":"Finde Gleichgesinnte und bilde ein Team.",
+                        "id": "team"
+                        
+                    }
+                ]
+            },
             'appCSS':               ['ccm.load', './style.css'],
             'learningResources': {
                 "week1" : ['ccm.load','./week1.js'],
@@ -103,6 +120,10 @@
                         },
                         {
                             "tag":"div",
+                            "class":"social-area-overview"
+                        },
+                        {
+                            "tag":"div",
                             "class":"social-area"
                         }
                     ]
@@ -120,7 +141,7 @@
 
             this.start = function( callback ){
                 render();
-                startComponents();
+                startInitialComponents();
                 if(callback) callback();
             };
             
@@ -131,7 +152,7 @@
                 self.element.appendChild(contentArea);
             };
             
-            const startComponents = function(){
+            const startInitialComponents = function(){
                 // Start navigation
                 my.navConfig.root = self.element.querySelector('.nav');
                 my.navConfig.scroll_area = self.element.querySelector('.content');
@@ -140,99 +161,189 @@
                     my.navConfig,
                     function( navInstance ){
                         my.navComp = navInstance;
-                        let loginElem = getUserLoginElem();
-                        my.navComp.setRightHeaderArea( loginElem );
-                        
-                        //Start user auth component
-                        my.userConfig.root = loginElem;
-                        my.userConfig.html = getUserButtonHTML();
-                        my.userConfig.css = ['ccm.load', './userComp.css'];
-                        my.userConfig.sign_on = "guest";
-                        self.ccm.start(
-                            my.userComp,
-                            my.userConfig,
-                            function( userInstance ){
-                                my.userComp = userInstance;
-                                
-                                //Start news feed
-                                my.newsFeedConfig.root = self.element.querySelector('.news-area');
-                                my.newsFeedConfig.user = my.userComp;
-                                self.ccm.start(
-                                    my.newsFeedComp,
-                                    my.newsFeedConfig,
-                                    function( newsFeedInstance ){
-                                        my.newsFeedComp = newsFeedInstance;
-                                        
-                                        // Set tab nav action to show this component
-                                        my.navComp.setTabAction(
-                                            "0", 
-                                            ()=>{
-                                                toggleWebsiteArea( my.newsFeedComp.root );
-                                            }
-                                        );
-                                        // Set initial view to the news page
-                                        toggleWebsiteArea(my.newsFeedComp.root);
-                                    }
-                                );
-                            }
-                        );
-                        
-                        //Start tile comp for learning units
-                        my.tileLearningUnitConfig.root = self.element.querySelector('.learning-unit-overview-area');
-                        self.ccm.start(
-                            my.tileComp,
-                            my.tileLearningUnitConfig,
-                            function( tileInstance_1 ){
-                                my.tileLearningUnit = tileInstance_1;
-                                // Set tab nav action to show this component
-                                my.navComp.setTabAction(
-                                    "1", 
-                                    ()=>{
-                                        toggleWebsiteArea( my.tileLearningUnit.root );
-                                    }
-                                );
-                                
-                                my.tileLearningUnit.setAction("week1", function(){
-                                    let leElem = self.ccm.helper.html( my.learningResources.week1 );
-                                    let leArea = self.element.querySelector('.learning-unit-area');
-                                    while (leArea.firstChild) {
-                                        leArea.removeChild(leArea.firstChild);
-                                    }
-                                    leArea.appendChild(leElem);
-                                    toggleWebsiteArea(self.element.querySelector('.learning-unit-area'));
-                                });
-                                
-                                my.tileLearningUnit.setAction("week2", function(){
-                                    let leElem = self.ccm.helper.html( my.learningResources.week2 );
-                                    let leArea = self.element.querySelector('.learning-unit-area');
-                                    while (leArea.firstChild) {
-                                        leArea.removeChild(leArea.firstChild);
-                                    }
-                                    leArea.appendChild(leElem);
-                                    toggleWebsiteArea(self.element.querySelector('.learning-unit-area'));
-                                });
-                            }
-                        );
-                        
-                        //Start tile comp for exercises
-                        my.tileExerciseConfig.root = self.element.querySelector('.exercise-area');
-                        self.ccm.start(
-                            my.tileComp,
-                            my.tileExerciseConfig,
-                            function( tileInstance_2 ){
-                                my.tileExercise = tileInstance_2;
-                                
-                                // Set tab nav action to show this component
-                                my.navComp.setTabAction(
-                                    "2", 
-                                    ()=>{
-                                        toggleWebsiteArea( my.tileExercise.root );
-                                    }
-                                );
-                            }
-                        );
+                        startUserAuth();
+                        setLazyCompStartActions();
                     }
                 );
+                
+                function startUserAuth(){
+                    let loginElem = getUserLoginElem();
+                    my.navComp.setRightHeaderArea( loginElem );
+
+                    //Start user auth component
+                    my.userConfig.root = loginElem;
+                    my.userConfig.html = getUserButtonHTML();
+                    my.userConfig.css = ['ccm.load', './userComp.css'];
+                    my.userConfig.sign_on = "guest";
+                    self.ccm.start(
+                        my.userComp,
+                        my.userConfig,
+                        function( userInstance ){
+                            my.userComp = userInstance;
+                            startNewsFeed();
+                        }
+                    );
+                };
+                
+                function startNewsFeed(){
+                    //Start news feed
+                    my.newsFeedConfig.root = self.element.querySelector('.news-area');
+                    my.newsFeedConfig.user = my.userComp;
+                    self.ccm.start(
+                        my.newsFeedComp,
+                        my.newsFeedConfig,
+                        function( newsFeedInstance ){
+                            my.newsFeedComp = newsFeedInstance;
+
+                            // Set tab nav action to show this component
+                            my.navComp.setTabAction(
+                                "0", 
+                                ()=>{
+                                    toggleWebsiteArea( my.newsFeedComp.root );
+                                }
+                            );
+                            // Set initial view to the news page
+                            toggleWebsiteArea(my.newsFeedComp.root);
+                        }
+                    );
+                };
+            };
+            
+            const setLazyCompStartActions = function(){
+                my.navComp.setTabAction(
+                    "1",
+                    startTileLearningUnits
+                );
+                my.navComp.setTabAction(
+                    "2",
+                    startTileExercises
+                );
+                my.navComp.setTabAction(
+                    "3",
+                    startTileSocial
+                );
+            };
+            
+            const startTileLearningUnits = function(){
+                 //Start tile comp for learning units
+                my.tileLearningUnitConfig.root = self.element.querySelector('.learning-unit-overview-area');
+                self.ccm.start(
+                    my.tileComp,
+                    my.tileLearningUnitConfig,
+                    function( tileInstance_1 ){
+                        my.tileLearningUnit = tileInstance_1;
+                        // Set tab nav action to show this component
+                        my.navComp.setTabAction(
+                            "1", 
+                            ()=>{
+                                toggleWebsiteArea( my.tileLearningUnit.root );
+                            }
+                        );
+                        toggleWebsiteArea( my.tileLearningUnit.root );
+                        setTileLearningUnitsActions();
+                    }
+                );
+                function setTileLearningUnitsActions(){
+                    my.tileLearningUnit.setAction("week1", function(){
+                        let leElem = self.ccm.helper.html( my.learningResources.week1 );
+                        let leArea = self.element.querySelector('.learning-unit-area');
+                        while (leArea.firstChild) {
+                            leArea.removeChild(leArea.firstChild);
+                        }
+                        leArea.appendChild(leElem);
+                        toggleWebsiteArea(self.element.querySelector('.learning-unit-area'));
+                    });
+
+                    my.tileLearningUnit.setAction("week2", function(){
+                        let leElem = self.ccm.helper.html( my.learningResources.week2 );
+                        let leArea = self.element.querySelector('.learning-unit-area');
+                        while (leArea.firstChild) {
+                            leArea.removeChild(leArea.firstChild);
+                        }
+                        leArea.appendChild(leElem);
+                        toggleWebsiteArea(self.element.querySelector('.learning-unit-area'));
+                    });
+                }
+            };
+                          
+            const startTileExercises = function(){
+                 //Start tile comp for exercises
+                my.tileExerciseConfig.root = self.element.querySelector('.exercise-area');
+                self.ccm.start(
+                    my.tileComp,
+                    my.tileExerciseConfig,
+                    function( tileInstance_2 ){
+                        my.tileExercise = tileInstance_2;
+                        // Set tab nav action to show this component
+                        my.navComp.setTabAction(
+                            "2", 
+                            ()=>{
+                                toggleWebsiteArea( my.tileExercise.root );
+                            }
+                        );
+                        toggleWebsiteArea( my.tileExercise.root );
+                    }
+                );
+            };
+            
+            const startTileSocial = function(){
+                // Start tile comp for social area
+                my.tileSocialConfig.root = self.element.querySelector('.social-area-overview');
+                self.ccm.start(
+                    my.tileComp,
+                    my.tileSocialConfig,
+                    ( tileSocialInstance )=>{
+                        my.tileSocial = tileSocialInstance;
+                        // Set tab nav action to show this component
+                        my.navComp.setTabAction(
+                            "3", 
+                            ()=>{
+                                toggleWebsiteArea( my.tileSocial.root );
+                            }
+                        );
+                        toggleWebsiteArea( my.tileSocial.root );
+                        setTileSocialActions();
+                    }
+                );
+                
+                function setTileSocialActions(){
+                    my.tileSocial.setAction(
+                        "kanban",
+                        ()=>{
+                            let newNode = document.createElement('div');
+                            let socialArea = self.element.querySelector('.social-area');
+                            let oldNode = socialArea.firstChild;
+                            if(oldNode)
+                                socialArea.replaceChild(newNode, oldNode);
+                            else
+                                socialArea.appendChild(newNode);
+                           let placeholder = self.ccm.helper.html(my.kanbanBoardComp);
+                           newNode.appendChild(placeholder);
+                           toggleWebsiteArea( socialArea );
+                        }
+                    );
+                    
+                    my.tileSocial.setAction(
+                        "team",
+                        ()=>{
+                            let newNode = document.createElement('div');
+                            let socialArea = self.element.querySelector('.social-area');
+                            let oldNode = socialArea.firstChild;
+                            if(oldNode)
+                                socialArea.replaceChild(newNode, oldNode);
+                            else
+                                socialArea.appendChild(newNode);
+                            
+                            my.teamBuildingConfig.root = socialArea;
+                            self.ccm.start(
+                                my.teamBuildingComp,
+                                my.teamBuildingConfig
+                            );
+                            
+                           toggleWebsiteArea( socialArea );
+                        }
+                    );
+                }
             };
             
             const getUserLoginElem = function(){

@@ -21,24 +21,6 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-/* 
-    Created on : 10.10.2017, 22:24:40
-    Author     : Moritz Kemp <moritz at kemp-thelen.de>
-*/
-/*
-.background {
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    background-attachment: fixed;
-    background: #58a;
-    background-image: repeating-linear-gradient(
-            30deg,
-            hsla(0,0%,100%,.1),
-            hsla(0,0%,100%,.1) 15px,
-            transparent 0, transparent 30px
-        );
-}*/
 
 .content {
     padding: 150px 10px 0 10px;
