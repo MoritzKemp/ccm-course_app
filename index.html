@@ -34,6 +34,12 @@ THE SOFTWARE.
         <div class="course-app"></div>
         <script>
             
+            if("serviceWorker" in navigator){
+                navigator.serviceWorker.register('https://moritzkemp.github.io/ccm-course_app/serviceworker.js');
+            } else {
+                console.log("No SW support here.");
+            }
+            
             let navConfig = {
                 "header_text": "Course App",
                 "hasBackground":"false",
@@ -56,12 +62,20 @@ THE SOFTWARE.
                     }
                 ]
             };
+            let newsFeedConfig = {
+                "enableOffline": "true",
+                "storeConfig":{
+                    "store":"moritz_kemp_news_feed",        
+                    "url":"https://ccm.inf.h-brs.de"
+                }
+            };
             
             ccm.start(
                 'https://moritzkemp.github.io/ccm-course_app/resources/ccm.course_app.js',
                 {
                     "root":document.querySelector('.course-app'),
-                    "navConfig": navConfig
+                    "navConfig": navConfig,
+                    "newsFeedConfig": newsFeedConfig
                 }
             );
         </script>
