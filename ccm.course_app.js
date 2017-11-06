@@ -35,7 +35,7 @@
             'userConfig':           {},
             'teamBuildingComp':     ['ccm.load', 'https://akless.github.io/ccm-components/teambuild/versions/ccm.teambuild-1.0.0.min.js'],
             'teamBuildingConfig':   {},
-            'kanbanBoardComp':      ['ccm.load', 'https://MoritzKemp.github.io/ccm-course_app/resources/placeholder.js'],
+            'kanbanBoardComp':      ['ccm.load', 'https://MoritzKemp.github.io/ccm-course_app/placeholder.js'],
             'kanbanBoardConfig':    {},
             'tileComp':             ['ccm.load', 'https://moritzkemp.github.io/ccm-tile/resources/ccm.tile.js'],
             'tileLearningUnitConfig':           {
@@ -88,10 +88,10 @@
                     }
                 ]
             },
-            'appCSS':               ['ccm.load', 'https://MoritzKemp.github.io/ccm-course_app/resources/style.css'],
+            'appCSS':               ['ccm.load', 'https://MoritzKemp.github.io/ccm-course_app/style.css'],
             'learningResources': {
-                "week1" : ['ccm.load','https://MoritzKemp.github.io/ccm-course_app/resources/week1.js'],
-                "week2" : ['ccm.load','https://MoritzKemp.github.io/ccm-course_app/resources/week2.js']
+                "week1" : ['ccm.load','https://MoritzKemp.github.io/ccm-course_app/week1.js'],
+                "week2" : ['ccm.load','https://MoritzKemp.github.io/ccm-course_app/week2.js']
             },
             'html':{
                 "nav" : {
@@ -173,7 +173,7 @@
                     //Start user auth component
                     my.userConfig.root = loginElem;
                     my.userConfig.html = getUserButtonHTML();
-                    my.userConfig.css = ['ccm.load', 'https://MoritzKemp.github.io/ccm-course_app/resources/userComp.css'];
+                    my.userConfig.css = ['ccm.load', 'https://MoritzKemp.github.io/ccm-course_app/userComp.css'];
                     my.userConfig.sign_on = "guest";
                     self.ccm.start(
                         my.userComp,
