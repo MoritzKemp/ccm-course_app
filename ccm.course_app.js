@@ -29,7 +29,7 @@
         config: {
             'navComp':              ['ccm.load', 'https://moritzkemp.github.io/ccm-nav_tabs/resources/ccm.nav_tabs.min.js'],
             'navConfig':            {},
-            'newsFeedComp':         ['ccm.load', 'https://moritzkemp.github.io/ccm-news_feed/resources/ccm.news_feed.min.js'],
+            'newsFeedComp':         ['ccm.load', 'https://moritzkemp.github.io/ccm-news_feed/ccm.news_feed.min.js'],
             'newsFeedConfig':       {},
             'userComp':             ['ccm.load', 'https://akless.github.io/ccm-components/user/ccm.user.min.js'],
             'userConfig':           {},
