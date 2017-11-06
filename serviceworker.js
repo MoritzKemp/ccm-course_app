@@ -29,12 +29,12 @@ const storesToHandle = [
 
 const CACHE_NAME = 'ccm-course-app-v1';
 const cacheURLs = {
-    //TODP index.hmtl etc
+    //TODO index.hmtl etc
     
     'https://akless.github.io/ccm/ccm.min.js' :                                   'cacheFailNetwork',
     'https://moritzkemp.github.io/ccm-nav_tabs/resources/ccm.nav_tabs.min.js' :   'cacheFailNetwork',
     'https://moritzkemp.github.io/ccm-nav_tabs/resources/style.css' :             'cacheFailNetwork',
-    'https://moritzkemp.github.io/ccm-news_feed/resources/ccm.news_feed.min.js' : 'cacheFailNetwork',
+    'https://moritzkemp.github.io/ccm-news_feed/ccm.news_feed.min.js' :           'cacheFailNetwork',
     'https://akless.github.io/ccm-components/user/ccm.user.min.js' :              'cacheFailNetwork',
     'https://moritzkemp.github.io/ccm-tile/resources/ccm.tile.js' :               'cacheFailNetwork'
 };
