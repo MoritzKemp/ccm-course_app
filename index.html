@@ -62,12 +62,20 @@ THE SOFTWARE.
                     }
                 ]
             };
+            let newsFeedConfig = {
+                "enableOffline": "true",
+                "storeConfig":{
+                    "store":"moritz_kemp_news_feed",        
+                    "url":"https://ccm.inf.h-brs.de"
+                }
+            };
             
             ccm.start(
                 './ccm.course_app.js',
                 {
                     "root":document.querySelector('.course-app'),
-                    "navConfig": navConfig
+                    "navConfig": navConfig,
+                    "newsFeedConfig": newsFeedConfig
                 }
             );
         </script>
