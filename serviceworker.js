@@ -23,34 +23,39 @@
  */
 /* global self, fetch, caches, Promise */
 
-const CACHE_NAME = 'ccm-course-app-v4';
+/* --- Cache configs --- */
+const CACHE_NAME = 'ccm-course-app-v7';
 const cacheURLs = {
     // Framework statics
-    'https://akless.github.io/ccm/ccm.min.js' :                                 'cacheFailNetwork',
+    'https://akless.github.io/ccm/ccm.min.js' :                                     'cacheFailNetwork',
     
     // Course app statics
-    'https://MoritzKemp.github.io/ccm-course_app/ccm-course_app/' :                                                       'cacheFailNetwork',
-    'https://MoritzKemp.github.io/ccm-course_app/ccm.course_app.js' :                                                     'cacheFailNetwork',
+    'https://MoritzKemp.github.io/ccm-course_app/' :                                                                          'networkFailCache',
+    'https://MoritzKemp.github.io/ccm-course_app/ccm.course_app.js' :                                                         'networkFailCache',
     
+    // Router statics
+    'https://moritzkemp.github.io/ccm-route_node/ccm.route_node.js' :               'cacheFailNetwork',
     
     // Nav tile statics
-    'https://moritzkemp.github.io/ccm-tile/resources/ccm.tile.js' :             'cacheFailNetwork',
-    'https://moritzkemp.github.io/ccm-tile/resources/tile-default.css' :        'cacheFailNetwork',
-    'https://moritzkemp.github.io/ccm-tile/resources/overall-default.css' :     'cacheFailNetwork',
+    'https://moritzkemp.github.io/ccm-tile/ccm.tile.js' :                           'cacheFailNetwork',
+    'https://moritzkemp.github.io/ccm-tile/tile-default.css' :                      'cacheFailNetwork',
+    'https://moritzkemp.github.io/ccm-tile/overall-default.css' :                   'cacheFailNetwork',
     
     // Nav tabs statics
-    'https://moritzkemp.github.io/ccm-nav_tabs/resources/ccm.nav_tabs.min.js' : 'cacheFailNetwork',
-    'https://moritzkemp.github.io/ccm-nav_tabs/resources/style.css' :           'cacheFailNetwork',
+    'https://moritzkemp.github.io/ccm-nav_tabs/ccm.nav_tabs.min.js' :               'cacheFailNetwork',
+    'https://moritzkemp.github.io/ccm-nav_tabs/style.css' :                         'cacheFailNetwork',
     
     // User auth statics
-    'https://akless.github.io/ccm-components/user/ccm.user.min.js' :            'cacheFailNetwork',
-    'https://MoritzKemp.github.io/ccm-course_app/ccm-course_app/userComp.css' :                                           'cacheFailNetwork',
+    'https://akless.github.io/ccm-components/user/versions/ccm.user-2.0.0.min.js' : 'cacheFailNetwork',
+    'https://MoritzKemp.github.io/ccm-course_app/userComp.css' :                                                              'cacheFailNetwork',
     
     // News feed statics
-    'https://moritzkemp.github.io/ccm-news_feed/ccm.news_feed.min.js' :         'cacheFailNetwork',
-    'https://moritzkemp.github.io/ccm-news_feed/style.css' :                    'cacheFailNetwork' 
+    'https://moritzkemp.github.io/ccm-news_feed/ccm.news_feed.min.js' :             'cacheFailNetwork',
+    'https://moritzkemp.github.io/ccm-news_feed/style.css' :                        'cacheFailNetwork',
+    
+    // Team building statics
+    'https://akless.github.io/ccm-components/teambuild/versions/ccm.teambuild-1.0.0.min.js' : 'cacheFailNetwork'
 };
-
 /* --- IndexedDB configs */
 const DB_NAME = "courseApp";
 const DB_VERSION = "2";
@@ -64,8 +69,6 @@ const MSG_TO_PAGE_GOT_POSTS = "got-posts";
 const MSG_TO_PAGE_POSTS_SENT = "posts-sent";
 const SYNC_SEND_POSTS = "send-posts";
 const SYNC_GET_POSTS = "get-posts";
-/* --- Cache config --- */
-
 
 self.addEventListener('fetch', event =>{
    let requestURL = new URL( event.request.url );
@@ -132,7 +135,7 @@ self.addEventListener('activate', event =>{
 self.addEventListener('sync', event =>{
     if(event.tag === SYNC_SEND_POSTS){
         event.waitUntil(
-            objectStore(idb, SEND_POST_STORE, 'readwrite')
+            objectStore(SEND_POST_STORE, 'readwrite')
             .then( (objectStore) =>{
                 return getAllObjects(objectStore);
             })
@@ -144,6 +147,9 @@ self.addEventListener('sync', event =>{
                             return deleteObject(object.id, SEND_POST_STORE);
                         else
                             reject(new Error("Could not send post with id: "+object.id));
+                    })
+                    .catch( () =>{
+                        reject(new Error("Seems to be still offline."));
                     });
                 }));
             })
@@ -154,7 +160,7 @@ self.addEventListener('sync', event =>{
     }
     if(event.tag === SYNC_GET_POSTS){
         event.waitUntil(
-            objectStore(idb, GET_POSTS_STORE, "readwrite")
+            objectStore(GET_POSTS_STORE, "readwrite")
             .then( (objectStore) =>{
                 return getAllObjects(objectStore);
             })
@@ -171,6 +177,9 @@ self.addEventListener('sync', event =>{
                     })
                     .then( (posts) =>{
                         notifyPagesGotPosts(posts);
+                    })
+                    .catch( () =>{
+                        reject(new Error("Seems to be still offline."));
                     });
                 }));
             })
@@ -203,7 +212,7 @@ const sendNewPost = (url) =>{
     })
     .catch( () =>{
     // 3. If offline, store in IndexedDB
-        objectStore(idb, SEND_POST_STORE, "readwrite")
+        objectStore(SEND_POST_STORE, "readwrite")
         .then((objectStore)=>{
             addObject( 
                 objectStore,
@@ -237,7 +246,7 @@ const getPosts = (url) =>{
     })
     .catch( ()=>{
         // 3. If offline, store in IndexedDB
-        objectStore(idb, GET_POSTS_STORE, "readwrite")
+        objectStore(GET_POSTS_STORE, "readwrite")
         .then((objectStore)=>{
             addObject( 
                 objectStore,
@@ -305,17 +314,17 @@ const openDatabase = function(dbName, dbVersion){
     });
 };
 
-const objectStore = function( db, storeName, transactionMode ){
+const objectStore = function( storeName, transactionMode ){
     return new Promise((resolve, reject )=>{
         let objectStore = {};
         if(!idb){
             openDatabase(DB_NAME, DB_VERSION).then(()=>{
-                objectStore = db
+                objectStore = idb
                     .transaction(storeName, transactionMode)
                     .objectStore(storeName);
             });
         } else {
-            objectStore = db
+            objectStore = idb
                 .transaction(storeName, transactionMode)
                 .objectStore(storeName);
         }
@@ -344,7 +353,7 @@ const getAllObjects = function( objectStore ){
 
 const deleteObject = function( key, objectStoreName ){
     return new Promise( (resolve, reject)=>{
-        objectStore(idb, objectStoreName, "readwrite").then(function( objectStore ){
+        objectStore(objectStoreName, "readwrite").then(function( objectStore ){
             objectStore.delete(key).onsuccess = function( event ){
                 console.log("Delete successfull:", key);
                 resolve("Successfull delete key: "+ key);
