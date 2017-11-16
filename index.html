@@ -35,7 +35,7 @@ THE SOFTWARE.
         <script>
             
             if("serviceWorker" in navigator){
-                navigator.serviceWorker.register('serviceworker.js');
+                navigator.serviceWorker.register('./serviceworker.js');
             } else {
                 console.log("No SW support here.");
             }
@@ -46,24 +46,29 @@ THE SOFTWARE.
                 "tabs": [
                     {
                         "text"   : "News",
-                        "action" : ""
+                        "action" : "",
+                        "route"  : "/news"
                     },
                     {
                         "text"   : "Phasen",
-                        "action" : ""
+                        "action" : "",
+                        "route"  : "/phasen"
                     },
                     {
                         "text"   : "Übungen",
-                        "action" : ""
+                        "action" : "",
+                        "route"  : "/uebungen"
                     },
                     {
                         "text"   : "Social",
-                        "action" : ""
+                        "action" : "",
+                        "route"  : "/social"
                     }
                 ]
             };
             let newsFeedConfig = {
                 "enableOffline": "true",
+                "useOwnServiceWorker": "false",
                 "storeConfig":{
                     "store":"moritz_kemp_news_feed",        
                     "url":"https://ccm.inf.h-brs.de"

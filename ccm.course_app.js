@@ -27,33 +27,36 @@
         name: 'course_app',
         ccm: 'https://akless.github.io/ccm/ccm.js',
         config: {
-            'navComp':              ['ccm.load', 'https://moritzkemp.github.io/ccm-nav_tabs/resources/ccm.nav_tabs.min.js'],
+            'navComp':              ['ccm.load', 'https://moritzkemp.github.io/ccm-nav_tabs/ccm.nav_tabs.min.js'],
             'navConfig':            {},
-            'newsFeedComp':         ['ccm.load', 'https://moritzkemp.github.io/ccm-news_feed/resources/ccm.news_feed.min.js'],
+            'newsFeedComp':         ['ccm.load', 'https://moritzkemp.github.io/ccm-news_feed/ccm.news_feed.min.js'],
             'newsFeedConfig':       {},
-            'userComp':             ['ccm.load', 'https://akless.github.io/ccm-components/user/ccm.user.min.js'],
+            'userComp':             ['ccm.load', 'https://akless.github.io/ccm-components/user/versions/ccm.user-2.0.0.min.js'],
             'userConfig':           {},
             'teamBuildingComp':     ['ccm.load', 'https://akless.github.io/ccm-components/teambuild/versions/ccm.teambuild-1.0.0.min.js'],
             'teamBuildingConfig':   {},
             'kanbanBoardComp':      ['ccm.load', './placeholder.js'],
             'kanbanBoardConfig':    {},
-            'tileComp':             ['ccm.load', 'https://moritzkemp.github.io/ccm-tile/resources/ccm.tile.js'],
+            'tileComp':             ['ccm.load', 'https://moritzkemp.github.io/ccm-tile/ccm.tile.js'],
             'tileLearningUnitConfig':           {
                 "tiles": [
                     {
                         "headline":"Woche 1",
                         "subline":"Einführung in HTML und CSS",
-                        "id":"week1"
+                        "id":"week1",
+                        "route": "/woche1"
                     },
                     {
                         "headline":"Woche 2",
                         "subline":"Einführung in Javascript",
-                        "id":"week2"
+                        "id":"week2",
+                        "route": "/woche2"
                     },
                     {
                         "headline":"Woche 3",
                         "subline":"Einführung in das ccm-Framework",
-                        "id":"week3"
+                        "id":"week3",
+                        "route": "/woche3"
                     }
                 ]
             },
@@ -156,6 +159,13 @@
                 // Start navigation
                 my.navConfig.root = self.element.querySelector('.nav');
                 my.navConfig.scroll_area = self.element.querySelector('.content');
+                my.navConfig.router = [
+                    "ccm.start", 
+                    "https://moritzkemp.github.io/ccm-route_node/ccm.route_node.js",
+                    {
+                        "isRoot": true
+                    }
+                ];
                 self.ccm.start(
                     my.navComp,
                     my.navConfig,
@@ -241,6 +251,11 @@
                         );
                         toggleWebsiteArea( my.tileLearningUnit.root );
                         setTileLearningUnitsActions();
+                        //Connect to upper router of nav tabs component
+                        my.tileLearningUnit.router.setPrevNode({
+                           "route": "/phasen",
+                           "node": my.navComp.router
+                        });
                     }
                 );
                 function setTileLearningUnitsActions(){
