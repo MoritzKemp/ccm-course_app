@@ -171,7 +171,7 @@
                     my.navConfig,
                     function( navInstance ){
                         my.navComp = navInstance;
-                        startUserAuth();
+                        startNewsFeed();
                         setLazyCompStartActions();
                     }
                 );
@@ -197,8 +197,15 @@
                 
                 function startNewsFeed(){
                     //Start news feed
+                    let loginElem = getUserLoginElem();
+                    my.navComp.setRightHeaderArea( loginElem );
+                    my.userConfig.root = loginElem;
+                    my.userConfig.html = getUserButtonHTML();
+                    my.userConfig.css = ['ccm.load', 'https://MoritzKemp.github.io/ccm-course_app/userComp.css'];
+                    my.userConfig.sign_on = "guest";
+                    
                     my.newsFeedConfig.root = self.element.querySelector('.news-area');
-                    my.newsFeedConfig.user = my.userComp;
+                    my.newsFeedConfig.user = ["ccm.instance", "https://akless.github.io/ccm-components/user/versions/ccm.user-2.0.0.min.js"];
                     self.ccm.start(
                         my.newsFeedComp,
                         my.newsFeedConfig,
