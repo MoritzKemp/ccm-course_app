@@ -28,10 +28,24 @@ THE SOFTWARE.
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
+        <link rel="stylesheet" type="text/css" href="./style.css">
         <script src="https://akless.github.io/ccm/ccm.js"></script>
     </head>
     <body>
-        <div class="course-app"></div>
+        <div class="course-app">
+            <div class="nav"></div>
+            <div class="content">
+                <div class="news-area"></div>
+                <div class="learning-unit-overview-area"></div>
+                <div class="learning-unit-area"></div>
+                <div class="exercise-overview-area"></div>
+                <div class="exercise-area"></div>
+                <div class="social-overview-area"></div>
+                <div class="social-area"></div>
+            </div>
+        </div>
+        
+        
         <script>
             
             if("serviceWorker" in navigator){
@@ -40,33 +54,92 @@ THE SOFTWARE.
                 console.log("No SW support here.");
             }
             
+            const toggleWebsiteArea = function( desiredActiveContent ){
+                let contentArea = document.querySelector('.content');
+                for(var i=0; i<contentArea.children.length; i++){
+                    contentArea.children[ i ].classList.add('hidden');
+                }
+                desiredActiveContent.classList.remove('hidden');
+            };
+            
+            let loginElem = (function(){
+                let el = document.createElement('div');
+                el.classList.add('login');
+                return el;
+            }());
             let navConfig = {
                 "header_text": "Course App",
-                "hasBackground":"false",
                 "tabs": [
                     {
                         "text"   : "News",
-                        "action" : "",
+//                        "action" : ()=>{toggleWebsiteArea(document.querySelector('.news-area'));},
                         "route"  : "/news"
                     },
                     {
                         "text"   : "Phasen",
-                        "action" : "",
+//                        "action" : ()=>{toggleWebsiteArea(document.querySelector('.learning-unit-overview-area'));},
                         "route"  : "/phasen"
                     },
                     {
                         "text"   : "Übungen",
-                        "action" : "",
+//                        "action" : ()=>{toggleWebsiteArea(document.querySelector('.exercise-overview-area'));},
                         "route"  : "/uebungen"
                     },
                     {
                         "text"   : "Social",
-                        "action" : "",
+//                        "action" : ()=>{toggleWebsiteArea(document.querySelector('.social-area-overview'));},
                         "route"  : "/social"
+                    }
+                ],
+                "root": document.querySelector('.nav'),
+                "scroll_area": document.querySelector('.content'),
+                "header_right_area": loginElem,
+                "router": [
+                    "ccm.start", 
+                    "https://moritzkemp.github.io/ccm-route_node/ccm.route_node.js",
+                    {
+                        "isRoot": true
                     }
                 ]
             };
+            let userConfig = {
+                "root": loginElem,
+                "html": {
+                    "logged_in" : {
+                        "tag"   : "div",
+                        "class" : "unlocked",
+                        "inner" : [
+                            {
+                                "tag":"button",
+                                "class": "logout-btn",
+                                "inner": "Abmelden",
+                                "onclick":"%click%"
+                            }
+                        ]
+                    },
+                    "logged_out" : {
+                        "tag"   : "div",
+                        "class" : "locked",
+                        "inner" : [
+                            {
+                                "tag":"button",
+                                "class": "login-btn",
+                                "inner": "Anmelden",
+                                "onclick":"%click%"
+                            }
+                        ]
+                    }
+                },
+                "css": ['ccm.load', './userComp.css'],
+                "sign_on": "guest" 
+            };  
             let newsFeedConfig = {
+                "root": document.querySelector('.news-area'),
+                "user": [
+                    "ccm.instance", 
+                    'https://akless.github.io/ccm-components/user/versions/ccm.user-2.0.0.min.js',
+                    userConfig
+                ],
                 "enableOffline": "true",
                 "useOwnServiceWorker": "false",
                 "storeConfig":{
@@ -74,13 +147,103 @@ THE SOFTWARE.
                     "url":"https://ccm.inf.h-brs.de"
                 }
             };
+            let tileLearningUnitConfig = {
+                "root": document.querySelector(".learning-unit-overview-area"),
+                "tiles": [
+                    {
+                        "headline":"Woche 1",
+                        "subline":"Einführung in HTML und CSS",
+                        "id":"week1",
+                        "route": "/woche1"
+                    },
+                    {
+                        "headline":"Woche 2",
+                        "subline":"Einführung in Javascript",
+                        "id":"week2",
+                        "route": "/woche2"
+                    },
+                    {
+                        "headline":"Woche 3",
+                        "subline":"Einführung in das ccm-Framework",
+                        "id":"week3",
+                        "route": "/woche3"
+                    }
+                ]
+            };
+            let tileExerciseUnitConfig = {
+                "root": document.querySelector(".exercise-overview-area"),
+                "tiles": [
+                    {
+                        "headline":"Übung 1",
+                        "subline":"Einfache HTML Seite. Abgabe: 01.01.2017"
+                    },
+                    {
+                        "headline":"Übung 2",
+                        "subline":"Listen mit Javascript. Abgabe 03.02.2017"
+                    },
+                    {
+                        "headline":"Übung 3",
+                        "subline":"Einfache Komponente mit dem ccm-Framework. Abgabe 23.02.2017"
+                    }
+                ]
+            };
+            let tileSocialConfig = {
+                "root" : document.querySelector('.social-overview-area'),
+                "tiles": [
+                    {
+                        "headline":"Kanban Board",
+                        "subline": "Organisieren Sie ihre Arbeit mit Kanban.",
+                        "id": "kanban"
+                    },
+                    {
+                        "headline":"Team-Building",
+                        "subline":"Finde Gleichgesinnte und bilde ein Team.",
+                        "id": "team"
+                        
+                    }
+                ]
+            };
+            
             
             ccm.start(
                 './ccm.course_app.js',
                 {
-                    "root":document.querySelector('.course-app'),
-                    "navConfig": navConfig,
-                    "newsFeedConfig": newsFeedConfig
+                    "wrapper": document.querySelector('.course-app'),
+                    'navComp': [
+                        'ccm.instance', 
+                        'https://moritzkemp.github.io/ccm-nav_tabs/ccm.nav_tabs.min.js',
+                        navConfig
+                    ],
+                    'newsFeedComp': [
+                        'ccm.instance', 
+                        'https://moritzkemp.github.io/ccm-news_feed/ccm.news_feed.js',
+                        newsFeedConfig
+                    ],
+                    'tileCompLearningUnit': [
+                        'ccm.instance', 
+                        'https://moritzkemp.github.io/ccm-tile/ccm.tile.js',
+                        tileLearningUnitConfig
+                    ],
+                    'tileCompExercise': [
+                        'ccm.instance', 
+                        'https://moritzkemp.github.io/ccm-tile/ccm.tile.js',
+                        tileExerciseUnitConfig
+                    ],
+                    'tileCompSocial': [
+                        'ccm.instance', 
+                        'https://moritzkemp.github.io/ccm-tile/ccm.tile.js',
+                        tileSocialConfig
+                    ],
+                    'learningResources': [
+                        {
+                            "id": "week1",
+                            "src": "./week1.js"
+                        },
+                        {
+                            "id": "week2",
+                            "src": "./week2.js"
+                        }
+                    ]
                 }
             );
         </script>
