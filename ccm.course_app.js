@@ -56,11 +56,10 @@
                 'ccm.load', 
                 'https://moritzkemp.github.io/ccm-news_feed/ccm.news_feed.min.js'
             ],
-            'news_feed_config':{},
-            'user': [
-                'ccm.load', 
-                'https://akless.github.io/ccm-components/user/versions/ccm.user-2.0.0.min.js'
-            ],
+            'news_feed_config':{
+                "enableOffline": "true",
+                "useOwnServiceWorker": "false"
+            },
             'user_config':{},
             'tile': [
                 'ccm.load', 
@@ -207,12 +206,12 @@
                 const startNewsFeed = function(){
                     
                     my.user_config.root = loginArea;
-                    my.user_config.css = ["ccm.load", "https://MoritzKemp.github.io/ccm-course_app/userComp.css"];
                     my.user_config.html = my.html.loginButton;
+                    my.user_config.css = ["ccm.load", "https://MoritzKemp.github.io/ccm-course_app/userComp.css"];
                     my.news_feed_config.root = self.element.querySelector('.news-area');
                     my.news_feed_config.user = [
                         "ccm.instance", 
-                        "https://akless.github.io/ccm-components/user/ccm.user.min.js",
+                        "https://akless.github.io/ccm-components/user/versions/ccm.user-2.0.0.min.js",
                         my.user_config
                     ];
                     self.ccm.start(

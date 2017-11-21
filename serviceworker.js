@@ -27,6 +27,8 @@
 const CACHE_NAME = 'ccm-course-app-v7';
 const cacheURLs = {
     // Framework statics
+    'https://akless.github.io/ccm/version/ccm-11.5.0.min.js' :                      'cacheFailNetwork',
+    'https://akless.github.io/ccm/version/ccm-12.1.2.min.js' :                      'cacheFailNetwork',
     'https://akless.github.io/ccm/ccm.min.js' :                                     'cacheFailNetwork',
     
     // Course app statics
@@ -53,6 +55,9 @@ const cacheURLs = {
     'https://moritzkemp.github.io/ccm-news_feed/ccm.news_feed.min.js' :             'cacheFailNetwork',
     'https://moritzkemp.github.io/ccm-news_feed/style.css' :                        'cacheFailNetwork',
     
+    // Kanban board statics
+    'https://akless.github.io/ccm-components/kanban_board/versions/ccm.kanban_board-1.1.0.min.js' : 'cacheFailNetwork', 
+    
     // Team building statics
     'https://akless.github.io/ccm-components/teambuild/versions/ccm.teambuild-1.0.0.min.js' : 'cacheFailNetwork'
 };
@@ -71,7 +76,7 @@ const SYNC_SEND_POSTS = "send-posts";
 const SYNC_GET_POSTS = "get-posts";
 
 self.addEventListener('fetch', event =>{
-   let requestURL = new URL( event.request.url );
+    let requestURL = new URL( event.request.url );
     
     switch( cacheURLs[requestURL.href] ){
         case "cacheOnly":
