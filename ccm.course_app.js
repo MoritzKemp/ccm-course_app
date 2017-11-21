@@ -56,11 +56,10 @@
                 'ccm.load', 
                 'https://moritzkemp.github.io/ccm-news_feed/ccm.news_feed.min.js'
             ],
-            'news_feed_config':{},
-            'user': [
-                'ccm.load', 
-                'https://akless.github.io/ccm-components/user/versions/ccm.user-2.0.0.min.js'
-            ],
+            'news_feed_config':{
+                "enableOffline": "true",
+                "useOwnServiceWorker": "false"
+            },
             'user_config':{},
             'tile': [
                 'ccm.load', 
@@ -88,27 +87,27 @@
                         },
                         {
                             "tag":"div",
-                            "class":"learning-unit-overview-area"
+                            "class":"learning-unit-overview-area hidden"
                         },
                         {
                             "tag":"div",
-                            "class":"learning-unit-area"
+                            "class":"learning-unit-area hidden"
                         },
                         {
                             "tag":"div",
-                            "class":"exercise-overview-area"
+                            "class":"exercise-overview-area hidden"
                         },
                         {
                             "tag":"div",
-                            "class":"exercise-area"
+                            "class":"exercise-area hidden"
                         },
                         {
                             "tag":"div",
-                            "class":"social-overview-area"
+                            "class":"social-overview-area hidden"
                         },
                         {
                             "tag":"div",
-                            "class":"kanban-board-area"
+                            "class":"kanban-board-area hidden"
                         }
                     ]
                 },
@@ -207,12 +206,12 @@
                 const startNewsFeed = function(){
                     
                     my.user_config.root = loginArea;
-                    my.user_config.css = ["ccm.load", "./userComp.css"];
                     my.user_config.html = my.html.loginButton;
+                    my.user_config.css = ["ccm.load", "./userComp.css"];
                     my.news_feed_config.root = self.element.querySelector('.news-area');
                     my.news_feed_config.user = [
                         "ccm.instance", 
-                        "https://akless.github.io/ccm-components/user/ccm.user.min.js",
+                        "https://akless.github.io/ccm-components/user/versions/ccm.user-2.0.0.min.js",
                         my.user_config
                     ];
                     self.ccm.start(
