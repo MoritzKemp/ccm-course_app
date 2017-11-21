@@ -32,6 +32,7 @@
                 'https://moritzkemp.github.io/ccm-nav_tabs/ccm.nav_tabs.min.js'
             ],
             'nav_tabs_config':{
+                "header_text"   : 'WE Master', 
                 "tabs": [
                     {
                         "text"   : "News",
@@ -177,6 +178,7 @@
             const startInitialComponents = function(){
                 let loginArea = self.ccm.helper.html(my.html.loginArea);
                 my.nav_tabs_config.root = self.element.querySelector('.nav');
+                my.nav_tabs_config.scroll_area = self.element;
                 my.nav_tabs_config.tabs[0].action = ()=>{toggleWebsiteArea(self.element.querySelector('.news-area'));};
                 my.nav_tabs_config.tabs[1].action = ()=>{toggleWebsiteArea(self.element.querySelector('.learning-unit-overview-area'));};
                 my.nav_tabs_config.tabs[2].action = ()=>{toggleWebsiteArea(self.element.querySelector('.exercise-overview-area'));};
@@ -187,7 +189,7 @@
                     {
                         "isRoot": true
                     }
-                ];  
+                ];
                 self.ccm.start(
                     my.nav_tabs,
                     my.nav_tabs_config,
