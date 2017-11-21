@@ -146,10 +146,10 @@ self.addEventListener('sync', event =>{
                         if( networkResponse.ok)
                             return deleteObject(object.id, SEND_POST_STORE);
                         else
-                            reject(new Error("Could not send post with id: "+object.id));
+                            return new Error("Could not send post with id: "+object.id);
                     })
                     .catch( () =>{
-                        reject(new Error("Seems to be still offline."));
+                         return new Error("Seems to be still offline.");
                     });
                 }));
             })
@@ -173,13 +173,13 @@ self.addEventListener('sync', event =>{
                             return response.json();
                         }
                         else
-                            reject(new Error("Could not perform get-posts-request with id:"+object.id));
+                            new Error("Could not perform get-posts-request with id:"+object.id);
                     })
                     .then( (posts) =>{
                         notifyPagesGotPosts(posts);
                     })
                     .catch( () =>{
-                        reject(new Error("Seems to be still offline."));
+                        return new Error("Seems to be still offline.");
                     });
                 }));
             })
