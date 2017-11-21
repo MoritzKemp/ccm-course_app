@@ -24,13 +24,8 @@
 /* global self, fetch, caches, Promise */
 
 /* --- Cache configs --- */
-const CACHE_NAME = 'ccm-course-app-v7';
+const CACHE_NAME = 'ccm-course-app-v8';
 const cacheURLs = {
-    // Framework statics
-    'https://akless.github.io/ccm/version/ccm-11.5.0.min.js' :                      'cacheFailNetwork',
-    'https://akless.github.io/ccm/version/ccm-12.1.2.min.js' :                      'cacheFailNetwork',
-    'https://akless.github.io/ccm/ccm.min.js' :                                     'cacheFailNetwork',
-    
     // Course app statics
     './' :                                                                          'networkFailCache',
     './ccm.course_app.js' :                                                         'networkFailCache',
@@ -78,35 +73,61 @@ const SYNC_GET_POSTS = "get-posts";
 self.addEventListener('fetch', event =>{
     let requestURL = new URL( event.request.url );
     
-    switch( cacheURLs[requestURL.href] ){
-        case "cacheOnly":
-            event.respondWith(
-                caches.match(event.request)
-            );
-            break;
-        case "networkOnly":
-            event.respondWith(
-                fetch(event.request)
-            );
-            break;
-        case "cacheFailNetwork":
-            event.respondWith(
-                caches.match(event.request).then( (cacheResponse) =>{
-                   return cacheResponse || fetch(event.request); 
-                })
-            );
-            break;
-        case "networkFailCache":
-            event.respondWith(
-                fetch(event.request).catch( () =>{
-                   return caches.match(event.request);
-                })
-            );
-            break;
-        default:
-            event.respondWith( 
-                fetch(event.request)
-            );
+    // Cache framework statics on demand
+    if(/.*\/\/akless.github.io\/ccm\/.*/g.test(requestURL.href)){
+        event.respondWith(
+            caches.open(CACHE_NAME).then( (cache)=>{
+                return cache.match(event.request).then( (cacheResponse)=>{
+                    return cacheResponse || fetch(event.request).then( (networkResponse)=>{
+                        cache.put(event.request, networkResponse.clone());
+                        return networkResponse;
+                    });
+                });
+            })
+        );
+    } else {    
+        switch( cacheURLs[requestURL.href] ){
+            case "cacheOnly":
+                event.respondWith(
+                    caches.match(event.request)
+                );
+                break;
+            case "networkOnly":
+                event.respondWith(
+                    fetch(event.request)
+                );
+                break;
+            case "cacheFailNetwork":
+                event.respondWith(
+                    caches.match(event.request).then( (cacheResponse) =>{
+                       return cacheResponse || fetch(event.request); 
+                    })
+                );
+                break;
+            case "networkFailCache":
+                event.respondWith(
+                    fetch(event.request).catch( () =>{
+                       return caches.match(event.request);
+                    })
+                );
+                break;
+            case "cacheOnDemand":
+                event.respondWith(
+                    caches.open(CACHE_NAME).then( (cache)=>{
+                        return cache.match(event.request).then( (cacheResponse)=>{
+                            return cacheResponse || fetch(event.request).then( (networkResponse)=>{
+                                cache.put(event.request, networkResponse.clone());
+                                return networkResponse;
+                            });
+                        });
+                    })
+                );
+                break;
+            default:
+                event.respondWith( 
+                    fetch(event.request)
+                );
+        }
     }
 });
 
