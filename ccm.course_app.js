@@ -87,27 +87,27 @@
                         },
                         {
                             "tag":"div",
-                            "class":"learning-unit-overview-area"
+                            "class":"learning-unit-overview-area hidden"
                         },
                         {
                             "tag":"div",
-                            "class":"learning-unit-area"
+                            "class":"learning-unit-area hidden"
                         },
                         {
                             "tag":"div",
-                            "class":"exercise-overview-area"
+                            "class":"exercise-overview-area hidden"
                         },
                         {
                             "tag":"div",
-                            "class":"exercise-area"
+                            "class":"exercise-area hidden"
                         },
                         {
                             "tag":"div",
-                            "class":"social-overview-area"
+                            "class":"social-overview-area hidden"
                         },
                         {
                             "tag":"div",
-                            "class":"kanban-board-area"
+                            "class":"kanban-board-area hidden"
                         }
                     ]
                 },
