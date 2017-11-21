@@ -27,75 +27,51 @@
         name: 'course_app',
         ccm: 'https://akless.github.io/ccm/ccm.js',
         config: {
-            'navComp':              ['ccm.load', 'https://moritzkemp.github.io/ccm-nav_tabs/ccm.nav_tabs.min.js'],
-            'navConfig':            {},
-            'newsFeedComp':         ['ccm.load', 'https://moritzkemp.github.io/ccm-news_feed/ccm.news_feed.min.js'],
-            'newsFeedConfig':       {},
-            'userComp':             ['ccm.load', 'https://akless.github.io/ccm-components/user/versions/ccm.user-2.0.0.min.js'],
-            'userConfig':           {},
-            'teamBuildingComp':     ['ccm.load', 'https://akless.github.io/ccm-components/teambuild/versions/ccm.teambuild-1.0.0.min.js'],
-            'teamBuildingConfig':   {},
-            'kanbanBoardComp':      ['ccm.load', 'https://MoritzKemp.github.io/ccm-course_app/placeholder.js'],
-            'kanbanBoardConfig':    {},
-            'tileComp':             ['ccm.load', 'https://moritzkemp.github.io/ccm-tile/ccm.tile.js'],
-            'tileLearningUnitConfig':           {
-                "tiles": [
+            'nav_tabs': [
+                'ccm.load', 
+                'https://moritzkemp.github.io/ccm-nav_tabs/ccm.nav_tabs.min.js'
+            ],
+            'nav_tabs_config':{
+                "tabs": [
                     {
-                        "headline":"Woche 1",
-                        "subline":"Einführung in HTML und CSS",
-                        "id":"week1",
-                        "route": "/woche1"
+                        "text"   : "News",
+                        "route"  : "/news"
                     },
                     {
-                        "headline":"Woche 2",
-                        "subline":"Einführung in Javascript",
-                        "id":"week2",
-                        "route": "/woche2"
+                        "text"   : "Phasen",
+                        "route"  : "/phasen"
                     },
                     {
-                        "headline":"Woche 3",
-                        "subline":"Einführung in das ccm-Framework",
-                        "id":"week3",
-                        "route": "/woche3"
+                        "text"   : "Übungen",
+                        "route"  : "/uebungen"
+                    },
+                    {
+                        "text"   : "Social",
+                        "route"  : "/social"
                     }
                 ]
             },
-            'tileExerciseConfig':           {
-                "tiles": [
-                    {
-                        "headline":"Übung 1",
-                        "subline":"Einfache HTML Seite. Abgabe: 01.01.2017"
-                    },
-                    {
-                        "headline":"Übung 2",
-                        "subline":"Listen mit Javascript. Abgabe 03.02.2017"
-                    },
-                    {
-                        "headline":"Übung 3",
-                        "subline":"Einfache Komponente mit dem ccm-Framework. Abgabe 23.02.2017"
-                    }
-                ]
-            },
-            'tileSocialConfig':{
-                "tiles": [
-                    {
-                        "headline":"Kanban Board",
-                        "subline": "Organisieren Sie ihre Arbeit mit Kanban.",
-                        "id": "kanban"
-                    },
-                    {
-                        "headline":"Team-Building",
-                        "subline":"Finde Gleichgesinnte und bilde ein Team.",
-                        "id": "team"
-                        
-                    }
-                ]
-            },
-            'appCSS':               ['ccm.load', 'https://MoritzKemp.github.io/ccm-course_app/style.css'],
-            'learningResources': {
-                "week1" : ['ccm.load','https://MoritzKemp.github.io/ccm-course_app/week1.js'],
-                "week2" : ['ccm.load','https://MoritzKemp.github.io/ccm-course_app/week2.js']
-            },
+            'news_feed': [
+                'ccm.load', 
+                'https://moritzkemp.github.io/ccm-news_feed/ccm.news_feed.min.js'
+            ],
+            'news_feed_config':{},
+            'user': [
+                'ccm.load', 
+                'https://akless.github.io/ccm-components/user/versions/ccm.user-2.0.0.min.js'
+            ],
+            'user_config':{},
+            'tile': [
+                'ccm.load', 
+                'https://moritzkemp.github.io/ccm-tile/ccm.tile.js'
+            ],
+            'tile_phases_config':{},
+            'tile_exercises_config':{},
+            'tile_social_config':{},
+            'kanban_board':['ccm.load', 'https://akless.github.io/ccm-components/kanban_board/versions/ccm.kanban_board-1.1.0.min.js'],
+            'kanban_board_config':{},
+            'learning_resources': {},
+            'style': ['ccm.load', 'https://MoritzKemp.github.io/ccm-course_app/style.css'],
             'html':{
                 "nav" : {
                     "tag":"div",
@@ -119,263 +95,27 @@
                         },
                         {
                             "tag":"div",
+                            "class":"exercise-overview-area"
+                        },
+                        {
+                            "tag":"div",
                             "class":"exercise-area"
                         },
                         {
                             "tag":"div",
-                            "class":"social-area-overview"
+                            "class":"social-overview-area"
                         },
                         {
                             "tag":"div",
-                            "class":"social-area"
+                            "class":"kanban-board-area"
                         }
                     ]
-                }
-            }
-        },
-        Instance : function(){
-            let self = this;
-            let my = {};
-
-            this.ready = function( callback ){
-                my = self.ccm.helper.privatize(self);
-                if(callback) callback();
-            };
-
-            this.start = function( callback ){
-                render();
-                startInitialComponents();
-                if(callback) callback();
-            };
-            
-            const render = function(){
-                let navArea = self.ccm.helper.html(my.html.nav);
-                self.element.appendChild(navArea);
-                let contentArea = self.ccm.helper.html(my.html.content);
-                self.element.appendChild(contentArea);
-            };
-            
-            const startInitialComponents = function(){
-                // Start navigation
-                my.navConfig.root = self.element.querySelector('.nav');
-                my.navConfig.scroll_area = self.element.querySelector('.content');
-                my.navConfig.router = [
-                    "ccm.start", 
-                    "https://moritzkemp.github.io/ccm-route_node/ccm.route_node.js",
-                    {
-                        "isRoot": true
-                    }
-                ];
-                self.ccm.start(
-                    my.navComp,
-                    my.navConfig,
-                    function( navInstance ){
-                        my.navComp = navInstance;
-                        startNewsFeed();
-                        setLazyCompStartActions();
-                    }
-                );
-                
-                function startUserAuth(){
-                    let loginElem = getUserLoginElem();
-                    my.navComp.setRightHeaderArea( loginElem );
-
-                    //Start user auth component
-                    my.userConfig.root = loginElem;
-                    my.userConfig.html = getUserButtonHTML();
-                    my.userConfig.css = ['ccm.load', 'https://MoritzKemp.github.io/ccm-course_app/userComp.css'];
-                    my.userConfig.sign_on = "guest";
-                    self.ccm.start(
-                        my.userComp,
-                        my.userConfig,
-                        function( userInstance ){
-                            my.userComp = userInstance;
-                            startNewsFeed();
-                        }
-                    );
-                };
-                
-                function startNewsFeed(){
-                    //Start news feed
-                    let loginElem = getUserLoginElem();
-                    my.navComp.setRightHeaderArea( loginElem );
-                    my.userConfig.root = loginElem;
-                    my.userConfig.html = getUserButtonHTML();
-                    my.userConfig.css = ['ccm.load', 'https://MoritzKemp.github.io/ccm-course_app/userComp.css'];
-                    my.userConfig.sign_on = "guest";
-                    
-                    my.newsFeedConfig.root = self.element.querySelector('.news-area');
-                    my.newsFeedConfig.user = ["ccm.instance", "https://akless.github.io/ccm-components/user/versions/ccm.user-2.0.0.min.js"];
-                    self.ccm.start(
-                        my.newsFeedComp,
-                        my.newsFeedConfig,
-                        function( newsFeedInstance ){
-                            my.newsFeedComp = newsFeedInstance;
-
-                            // Set tab nav action to show this component
-                            my.navComp.setTabAction(
-                                "0", 
-                                ()=>{
-                                    toggleWebsiteArea( my.newsFeedComp.root );
-                                }
-                            );
-                            // Set initial view to the news page
-                            toggleWebsiteArea(my.newsFeedComp.root);
-                        }
-                    );
-                };
-            };
-            
-            const setLazyCompStartActions = function(){
-                my.navComp.setTabAction(
-                    "1",
-                    startTileLearningUnits
-                );
-                my.navComp.setTabAction(
-                    "2",
-                    startTileExercises
-                );
-                my.navComp.setTabAction(
-                    "3",
-                    startTileSocial
-                );
-            };
-            
-            const startTileLearningUnits = function(){
-                 //Start tile comp for learning units
-                my.tileLearningUnitConfig.root = self.element.querySelector('.learning-unit-overview-area');
-                self.ccm.start(
-                    my.tileComp,
-                    my.tileLearningUnitConfig,
-                    function( tileInstance_1 ){
-                        my.tileLearningUnit = tileInstance_1;
-                        // Set tab nav action to show this component
-                        my.navComp.setTabAction(
-                            "1", 
-                            ()=>{
-                                toggleWebsiteArea( my.tileLearningUnit.root );
-                            }
-                        );
-                        toggleWebsiteArea( my.tileLearningUnit.root );
-                        setTileLearningUnitsActions();
-                        //Connect to upper router of nav tabs component
-                        my.tileLearningUnit.router.setPrevNode({
-                           "route": "/phasen",
-                           "node": my.navComp.router
-                        });
-                    }
-                );
-                function setTileLearningUnitsActions(){
-                    my.tileLearningUnit.setAction("week1", function(){
-                        let leElem = self.ccm.helper.html( my.learningResources.week1 );
-                        let leArea = self.element.querySelector('.learning-unit-area');
-                        while (leArea.firstChild) {
-                            leArea.removeChild(leArea.firstChild);
-                        }
-                        leArea.appendChild(leElem);
-                        toggleWebsiteArea(self.element.querySelector('.learning-unit-area'));
-                    });
-
-                    my.tileLearningUnit.setAction("week2", function(){
-                        let leElem = self.ccm.helper.html( my.learningResources.week2 );
-                        let leArea = self.element.querySelector('.learning-unit-area');
-                        while (leArea.firstChild) {
-                            leArea.removeChild(leArea.firstChild);
-                        }
-                        leArea.appendChild(leElem);
-                        toggleWebsiteArea(self.element.querySelector('.learning-unit-area'));
-                    });
-                }
-            };
-                          
-            const startTileExercises = function(){
-                 //Start tile comp for exercises
-                my.tileExerciseConfig.root = self.element.querySelector('.exercise-area');
-                self.ccm.start(
-                    my.tileComp,
-                    my.tileExerciseConfig,
-                    function( tileInstance_2 ){
-                        my.tileExercise = tileInstance_2;
-                        // Set tab nav action to show this component
-                        my.navComp.setTabAction(
-                            "2", 
-                            ()=>{
-                                toggleWebsiteArea( my.tileExercise.root );
-                            }
-                        );
-                        toggleWebsiteArea( my.tileExercise.root );
-                    }
-                );
-            };
-            
-            const startTileSocial = function(){
-                // Start tile comp for social area
-                my.tileSocialConfig.root = self.element.querySelector('.social-area-overview');
-                self.ccm.start(
-                    my.tileComp,
-                    my.tileSocialConfig,
-                    ( tileSocialInstance )=>{
-                        my.tileSocial = tileSocialInstance;
-                        // Set tab nav action to show this component
-                        my.navComp.setTabAction(
-                            "3", 
-                            ()=>{
-                                toggleWebsiteArea( my.tileSocial.root );
-                            }
-                        );
-                        toggleWebsiteArea( my.tileSocial.root );
-                        setTileSocialActions();
-                    }
-                );
-                
-                function setTileSocialActions(){
-                    my.tileSocial.setAction(
-                        "kanban",
-                        ()=>{
-                            let newNode = document.createElement('div');
-                            let socialArea = self.element.querySelector('.social-area');
-                            let oldNode = socialArea.firstChild;
-                            if(oldNode)
-                                socialArea.replaceChild(newNode, oldNode);
-                            else
-                                socialArea.appendChild(newNode);
-                           let placeholder = self.ccm.helper.html(my.kanbanBoardComp);
-                           newNode.appendChild(placeholder);
-                           toggleWebsiteArea( socialArea );
-                        }
-                    );
-                    
-                    my.tileSocial.setAction(
-                        "team",
-                        ()=>{
-                            let newNode = document.createElement('div');
-                            let socialArea = self.element.querySelector('.social-area');
-                            let oldNode = socialArea.firstChild;
-                            if(oldNode)
-                                socialArea.replaceChild(newNode, oldNode);
-                            else
-                                socialArea.appendChild(newNode);
-                            
-                            my.teamBuildingConfig.root = socialArea;
-                            self.ccm.start(
-                                my.teamBuildingComp,
-                                my.teamBuildingConfig
-                            );
-                            
-                           toggleWebsiteArea( socialArea );
-                        }
-                    );
-                }
-            };
-            
-            const getUserLoginElem = function(){
-                let el = document.createElement('div');
-                el.classList.add('login');
-                return el;
-            };
-            
-            const getUserButtonHTML = function(){
-                return {
+                },
+                "loginArea":{
+                    "tag": "div",
+                    "class": "login"
+                },
+                'loginButton':{
                     "logged_in" : {
                         "tag"   : "div",
                         "class" : "unlocked",
@@ -400,8 +140,188 @@
                             }
                         ]
                     }
+                }
+            }
+        },
+        Instance : function(){
+            let self = this;
+            let my = {};
+            
+            this.ready = function( callback ){
+                my = self.ccm.helper.privatize(self);
+                callback();
+            };
+
+            this.start = function( callback ){
+                registerServiceWorker();
+                render();
+                startInitialComponents();
+                if(callback) callback();
+            };
+            
+            const registerServiceWorker = function(){
+                if("serviceWorker" in navigator){
+                    navigator.serviceWorker.register('https://MoritzKemp.github.io/ccm-course_app/serviceworker.js');
+                } else {
+                    console.log("No SW support here.");
+                }
+            };
+            
+            const render = function(){
+                let navArea = self.ccm.helper.html(my.html.nav);
+                self.element.appendChild(navArea);
+                let contentArea = self.ccm.helper.html(my.html.content);
+                self.element.appendChild(contentArea);
+            };
+            
+            const startInitialComponents = function(){
+                let loginArea = self.ccm.helper.html(my.html.loginArea);
+                my.nav_tabs_config.root = self.element.querySelector('.nav');
+                my.nav_tabs_config.tabs[0].action = ()=>{toggleWebsiteArea(self.element.querySelector('.news-area'));};
+                my.nav_tabs_config.tabs[1].action = ()=>{toggleWebsiteArea(self.element.querySelector('.learning-unit-overview-area'));};
+                my.nav_tabs_config.tabs[2].action = ()=>{toggleWebsiteArea(self.element.querySelector('.exercise-overview-area'));};
+                my.nav_tabs_config.tabs[3].action = ()=>{toggleWebsiteArea(self.element.querySelector('.social-overview-area'));};
+                my.nav_tabs_config.router = [
+                    "ccm.start", 
+                    "https://moritzkemp.github.io/ccm-route_node/ccm.route_node.js",
+                    {
+                        "isRoot": true
+                    }
+                ];  
+                self.ccm.start(
+                    my.nav_tabs,
+                    my.nav_tabs_config,
+                    (instance)=>{
+                        self.nav_tabs = instance;
+                        instance.setRightHeaderArea(loginArea);
+                        startNewsFeed();
+                        startPhasesTiles();
+                        startExercisesTiles();
+                        startSocialTiles();
+                    }
+                );
+                
+                
+                const startNewsFeed = function(){
+                    
+                    my.user_config.root = loginArea;
+                    my.user_config.css = ["ccm.load", "https://MoritzKemp.github.io/ccm-course_app/userComp.css"];
+                    my.user_config.html = my.html.loginButton;
+                    my.news_feed_config.root = self.element.querySelector('.news-area');
+                    my.news_feed_config.user = [
+                        "ccm.instance", 
+                        "https://akless.github.io/ccm-components/user/ccm.user.min.js",
+                        my.user_config
+                    ];
+                    self.ccm.start(
+                        my.news_feed,
+                        my.news_feed_config,
+                        (instance)=>{
+                            self.news_feed = instance;
+                        }
+                    );    
+                };
+                
+                const startPhasesTiles = function(){
+                    my.tile_phases_config.root = self.element.querySelector('.learning-unit-overview-area');
+                    my.tile_phases_config.router = [
+                        "ccm.start", 
+                        "https://moritzkemp.github.io/ccm-route_node/ccm.route_node.js",
+                        {
+                            "prevNode": {
+                                "node": self.nav_tabs.router,
+                                "route": "/phasen"
+                            }
+                        }
+                    ];
+                    let leArea = self.element.querySelector('.learning-unit-area');
+                    if(my.tile_phases_config.tiles){
+                        my.tile_phases_config.tiles.forEach((tile)=>{
+                            tile.action = ()=>{
+                                let currentLeElem = self.ccm.helper.html(my.learning_resources[tile.id]);
+                                while(leArea.firstChild){
+                                    leArea.removeChild(leArea.firstChild);
+                                }
+                                leArea.appendChild(currentLeElem);
+                                toggleWebsiteArea(leArea);
+                            };
+                        });
+                    }
+                    self.ccm.start(
+                        my.tile,
+                        my.tile_phases_config,
+                        (instance)=>{
+                            self.tile_social = instance;
+                        }
+                    );
+                };
+                
+                const startExercisesTiles = function(){
+                    my.tile_exercises_config.root = self.element.querySelector('.exercise-overview-area');
+                    let exerciseArea = self.element.querySelector('.exercise-area');
+                    if(my.tile_exercises_config.tiles){
+                        my.tile_exercises_config.tiles.forEach((tile)=>{
+                            tile.action = ()=>{
+                                let currentLeElem = self.ccm.helper.html(my.learning_resources[tile.id]);
+                                while(exerciseArea.firstChild){
+                                    exerciseArea.removeChild(exerciseArea.firstChild);
+                                }
+                                exerciseArea.appendChild(currentLeElem);
+                                toggleWebsiteArea(exerciseArea);
+                            };
+                        });
+                    }
+                    my.tile_exercises_config.router = [
+                        "ccm.start", 
+                        "https://moritzkemp.github.io/ccm-route_node/ccm.route_node.js",
+                        {
+                            "prevNode": {
+                                "node": self.nav_tabs.router,
+                                "route": "/uebungen"
+                            }
+                        }
+                    ];
+                    self.ccm.start(
+                        my.tile,
+                        my.tile_exercises_config,
+                        (instance)=>{
+                            self.tile_exercises = instance;
+                        }
+                    );
+                };
+                
+                const startSocialTiles = function(){
+                    my.tile_social_config.root = self.element.querySelector('.social-overview-area');
+                    my.tile_social_config.router = [
+                        "ccm.start", 
+                        "https://moritzkemp.github.io/ccm-route_node/ccm.route_node.js",
+                        {
+                            "prevNode": {
+                                "node": self.nav_tabs.router,
+                                "route": "/social"
+                            }
+                        }
+                    ];
+                    let kanbanArea = self.element.querySelector('.kanban-board-area');
+                    my.kanban_board_config.root = kanbanArea;
+                    self.ccm.start(
+                        my.kanban_board,
+                        my.kanban_board_config
+                    );
+                    
+                    my.tile_social_config.tiles[0].action = ()=>{
+                        toggleWebsiteArea(kanbanArea);
+                    };
+                    self.ccm.start(
+                        my.tile,
+                        my.tile_social_config,
+                        (instance)=>{
+                            self.tile_social = instance;
+                        }
+                    );
                 };
             };
+            
             
             const toggleWebsiteArea = function( desiredActiveContent ){
                 let contentArea = self.element.querySelector('.content');
@@ -409,8 +329,7 @@
                     contentArea.children[ i ].classList.add('hidden');
                 }
                 desiredActiveContent.classList.remove('hidden');
-            };
-            
+            };     
         }
     };
     

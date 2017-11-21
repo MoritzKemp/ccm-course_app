@@ -28,60 +28,24 @@ THE SOFTWARE.
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
+        <link rel="stylesheet" type="text/css" href="./style.css">
         <script src="https://akless.github.io/ccm/ccm.js"></script>
+        <script src="./ccm.course_app.js"></script>
     </head>
     <body>
-        <div class="course-app"></div>
-        <script>
-            
-            if("serviceWorker" in navigator){
-                navigator.serviceWorker.register('https://moritzkemp.github.io/ccm-course_app/serviceworker.js');
-            } else {
-                console.log("No SW support here.");
-            }
-            
-            let navConfig = {
-                "header_text": "Course App",
-                "hasBackground":"false",
-                "tabs": [
-                    {
-                        "text"   : "News",
-                        "action" : "",
-						"route"	 : "/news"
-                    },
-                    {
-                        "text"   : "Phasen",
-                        "action" : "",
-						"route"  : "/phasen"
-                    },
-                    {
-                        "text"   : "Übungen",
-                        "action" : "",
-						"route"  : "/uebungen"
-                    },
-                    {
-                        "text"   : "Social",
-                        "action" : "",
-						"route"  : "/social"
-                    }
-                ]
-            };
-            let newsFeedConfig = {
-                "enableOffline": "true",
-                "storeConfig":{
-                    "store":"moritz_kemp_news_feed",        
-                    "url":"https://ccm.inf.h-brs.de"
-                }
-            };
-            
-            ccm.start(
-                'https://moritzkemp.github.io/ccm-course_app/ccm.course_app.js',
-                {
-                    "root":document.querySelector('.course-app'),
-                    "navConfig": navConfig,
-                    "newsFeedConfig": newsFeedConfig
-                }
-            );
-        </script>
+    <ccm-course_app
+        tile_phases_config='["ccm.load", "https://moritzkemp.github.io/ccm-course_app/tilePhasesConfig.js"]'
+        tile_exercises_config='["ccm.load", "https://moritzkemp.github.io/ccm-course_app/tileExerciseConfig.js"]'
+        tile_social_config='["ccm.load", "https://moritzkemp.github.io/ccm-course_app/tileSocialConfig.js"]'
+        learning_resources='{
+            "week1" : ["ccm.load","https://moritzkemp.github.io/ccm-course_app/week1.js"],
+            "week2" : ["ccm.load","https://moritzkemp.github.io/ccm-course_app/week2.js"],
+            "week3" : ["ccm.load","https://moritzkemp.github.io/ccm-course_app/week3.js"],
+            "uebung1" : ["ccm.load","https://moritzkemp.github.io/ccm-course_app/uebung1.js"],
+            "uebung2" : ["ccm.load","https://moritzkemp.github.io/ccm-course_app/uebung2.js"],
+            "uebung3" : ["ccm.load","https://moritzkemp.github.io/ccm-course_app/uebung3.js"]
+        }'
+        >
+    </ccm-course_app>
     </body>
 </html>
