@@ -1,0 +1,20 @@
+{
+    "short_name": "WE App",
+    "name": "Web Engineering App",
+    "description": "Read news, learn, exercise and collaborate in your Web Engineering course",
+    "start_url": "/",
+    "scope": "/",
+    "display": "fullscreen",
+    "icons": [
+        {
+            "src": "/img/app-icon-192.png",
+            "type": "image/png",
+            "sizes": "192x192"
+        },
+        {
+            "src": "/img/app-icon-512.png",
+            "type": "image/png",
+            "sizes": "512x512"
+        }
+    ]
+}
