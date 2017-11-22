@@ -349,13 +349,15 @@ const objectStore = function( storeName, transactionMode ){
                 objectStore = idb
                     .transaction(storeName, transactionMode)
                     .objectStore(storeName);
+                    
+                resolve(objectStore);
             });
         } else {
             objectStore = idb
                 .transaction(storeName, transactionMode)
                 .objectStore(storeName);
+            resolve(objectStore);
         }
-        resolve(objectStore);
     });
 };
 
