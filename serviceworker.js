@@ -85,7 +85,8 @@ self.addEventListener('fetch', event =>{
                 });
             })
         );
-    } else {    
+    } else {
+        // Different caching strategies. Credit goes to Tal Ater, "Building Progressive Web Apps"
         switch( cacheURLs[requestURL.href] ){
             case "cacheOnly":
                 event.respondWith(
