@@ -2,7 +2,8 @@
     "short_name": "WE App",
     "name": "Web Engineering App",
     "description": "Read news, learn, exercise and collaborate in your Web Engineering course",
-    "start_url": ".",
+    "start_url": "/",
+    "scope": "/",
     "display": "fullscreen",
     "icons": [
         {
@@ -15,5 +16,7 @@
             "type": "image/png",
             "sizes": "512x512"
         }
-    ]
+    ],
+    "theme_color": "orange",
+    "background_color": "orange"
 }
