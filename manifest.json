@@ -2,7 +2,7 @@
     "short_name": "WE App",
     "name": "Web Engineering App",
     "description": "Read news, learn, exercise and collaborate in your Web Engineering course",
-    "start_url": "/ccm-course_app",
+    "start_url": ".",
     "scope": "/",
     "display": "fullscreen",
     "icons": [
