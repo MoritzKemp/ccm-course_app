@@ -85,7 +85,9 @@ self.addEventListener('fetch', event =>{
                 });
             })
         );
-    } else {
+    } else if(/https:\/\/kaul.inf.h-brs.de\/login\/login.php.*/.test(requestURL.href)){
+        return;
+    }else {
         // Different caching strategies. Credit goes to Tal Ater, "Building Progressive Web Apps"
         switch( cacheURLs[requestURL.href] ){
             case "cacheOnly":
