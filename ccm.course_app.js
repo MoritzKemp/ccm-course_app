@@ -60,7 +60,15 @@
                 "enableOffline": "true",
                 "useOwnServiceWorker": "false"
             },
+            'user': [
+                'ccm.load',
+                'https://akless.github.io/ccm-components/user/versions/ccm.user-2.0.0.min.js'
+            ],
             'user_config':{},
+            'route_node': [
+                'ccm.load',
+                'https://moritzkemp.github.io/ccm-route_node/ccm.route_node.js'
+            ],
             'tile': [
                 'ccm.load', 
                 'https://moritzkemp.github.io/ccm-tile/ccm.tile.js'
@@ -68,7 +76,10 @@
             'tile_phases_config':{},
             'tile_exercises_config':{},
             'tile_social_config':{},
-            'kanban_board':['ccm.load', 'https://akless.github.io/ccm-components/kanban_board/versions/ccm.kanban_board-1.1.0.min.js'],
+            'kanban_board':[
+                'ccm.load', 
+                'https://akless.github.io/ccm-components/kanban_board/versions/ccm.kanban_board-1.1.0.min.js'
+            ],
             'kanban_board_config':{},
             'learning_resources': {},
             'style': ['ccm.load', './style.css'],
@@ -184,7 +195,7 @@
                 my.nav_tabs_config.tabs[3].action = ()=>{toggleWebsiteArea(self.element.querySelector('.social-overview-area'));};
                 my.nav_tabs_config.router = [
                     "ccm.start", 
-                    "https://moritzkemp.github.io/ccm-route_node/ccm.route_node.js",
+                    my.route_node,
                     {
                         "isRoot": true
                     }
@@ -208,10 +219,11 @@
                     my.user_config.root = loginArea;
                     my.user_config.html = my.html.loginButton;
                     my.user_config.css = ["ccm.load", "./userComp.css"];
+                    my.user_config.sign_on = "hbrsinfkaul";
                     my.news_feed_config.root = self.element.querySelector('.news-area');
                     my.news_feed_config.user = [
                         "ccm.instance", 
-                        "https://akless.github.io/ccm-components/user/versions/ccm.user-2.0.0.min.js",
+                        my.user,
                         my.user_config
                     ];
                     self.ccm.start(
@@ -227,7 +239,7 @@
                     my.tile_phases_config.root = self.element.querySelector('.learning-unit-overview-area');
                     my.tile_phases_config.router = [
                         "ccm.start", 
-                        "https://moritzkemp.github.io/ccm-route_node/ccm.route_node.js",
+                        my.route_node,
                         {
                             "prevNode": {
                                 "node": self.nav_tabs.router,
@@ -274,7 +286,7 @@
                     }
                     my.tile_exercises_config.router = [
                         "ccm.start", 
-                        "https://moritzkemp.github.io/ccm-route_node/ccm.route_node.js",
+                        my.route_node,
                         {
                             "prevNode": {
                                 "node": self.nav_tabs.router,
@@ -295,7 +307,7 @@
                     my.tile_social_config.root = self.element.querySelector('.social-overview-area');
                     my.tile_social_config.router = [
                         "ccm.start", 
-                        "https://moritzkemp.github.io/ccm-route_node/ccm.route_node.js",
+                        my.route_node,
                         {
                             "prevNode": {
                                 "node": self.nav_tabs.router,
