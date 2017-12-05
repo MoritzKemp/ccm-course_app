@@ -219,6 +219,7 @@
                     my.user_config.root = loginArea;
                     my.user_config.html = my.html.loginButton;
                     my.user_config.css = ["ccm.load", "https://MoritzKemp.github.io/ccm-course_app/userComp.css"];
+                    my.user_config.sign_on = "hbrsinfkaul";
                     my.news_feed_config.root = self.element.querySelector('.news-area');
                     my.news_feed_config.user = [
                         "ccm.instance", 
