@@ -24,7 +24,7 @@
 /* global self, fetch, caches, Promise */
 
 /* --- Cache configs --- */
-const CACHE_NAME = 'ccm-course-app-v8';
+const CACHE_NAME = 'ccm-course-app-v9';
 const cacheURLs = {
     // Course app statics
     'https://moritzkemp.github.io/ccm-course_app/' :                                'networkFailCache',
