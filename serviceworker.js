@@ -27,8 +27,8 @@
 const CACHE_NAME = 'ccm-course-app-v8';
 const cacheURLs = {
     // Course app statics
-    'https://MoritzKemp.github.io/ccm-course_app/' :                                                                          'networkFailCache',
-    'https://MoritzKemp.github.io/ccm-course_app/ccm.course_app.js' :                                                         'networkFailCache',
+    'https://moritzkemp.github.io/ccm-course_app/' :                                'networkFailCache',
+    'https://moritzkemp.github.io/ccm-course_app/ccm.course_app.js' :				'networkFailCache',
     
     // Router statics
     'https://moritzkemp.github.io/ccm-route_node/ccm.route_node.js' :               'cacheFailNetwork',
