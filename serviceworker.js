@@ -24,11 +24,21 @@
 /* global self, fetch, caches, Promise */
 
 /* --- Cache configs --- */
-const CACHE_NAME = 'ccm-course-app-v8';
+const CACHE_NAME = 'ccm-course-app-v9';
 const cacheURLs = {
     // Course app statics
     './' :                                                                          'networkFailCache',
     './ccm.course_app.js' :                                                         'networkFailCache',
+    'https://moritzkemp.github.io/ccm-course_app/tilePhasesConfig.js' :             'cacheFailNetwork',
+    'https://moritzkemp.github.io/ccm-course_app/tileExerciseConfig.js' :          'cacheFailNetwork',
+    'https://moritzkemp.github.io/ccm-course_app/tileSocialConfig.js' :          'cacheFailNetwork',
+    'https://moritzkemp.github.io/ccm-course_app/week1.js' :                        'cacheFailNetwork',
+    'https://moritzkemp.github.io/ccm-course_app/week2.js' :                        'cacheFailNetwork',
+    'https://moritzkemp.github.io/ccm-course_app/week3.js' :                        'cacheFailNetwork',
+    'https://moritzkemp.github.io/ccm-course_app/uebung1.js' :                      'cacheFailNetwork',
+    'https://moritzkemp.github.io/ccm-course_app/uebung2.js' :                      'cacheFailNetwork',
+    'https://moritzkemp.github.io/ccm-course_app/uebung3.js' :                      'cacheFailNetwork',
+    'https://moritzkemp.github.io/ccm-course_app/style.css' :                       'cacheFailNetwork',
     
     // Router statics
     'https://moritzkemp.github.io/ccm-route_node/ccm.route_node.js' :               'cacheFailNetwork',
